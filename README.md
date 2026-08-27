@@ -59,3 +59,11 @@ data directory (`moodledata/`).
     all. Railway rejects a `healthcheckPath` containing a file extension, which rules out
     Moodle's own pages, and `templateGenerate` does not carry `healthcheckTimeout` into a
     published template.
+
+### Reverse proxy
+
+Railway terminates TLS at its edge and forwards the public `Host` header verbatim.
+Moodle's `$CFG->reverseproxy` is for the different-internal-hostname case, and Moodle 5
+raises `reverseproxyabused` (a 500 on every page) when it is set while the received Host
+matches `wwwroot` — `lib/setuplib.php:753`. So this image forces `REVERSEPROXY=false` and
+relies on `SSLPROXY`, which the entrypoint derives from the scheme of `SITE_URL`.

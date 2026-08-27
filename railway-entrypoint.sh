@@ -48,6 +48,13 @@ esac
 export SSLPROXY
 log "SSLPROXY=$SSLPROXY for $SITE_URL"
 
+# Moodle 5 throws reverseproxyabused when $CFG->reverseproxy is set and the Host
+# header it receives matches the wwwroot host (lib/setuplib.php:753). Railway's
+# edge forwards the public Host verbatim, so those are always identical here and
+# every page would 500. Railway terminates TLS, which is what sslproxy is for;
+# reverseproxy is for the different-internal-hostname case and must stay off.
+export REVERSEPROXY=false
+
 # --- 3. Volume ownership -----------------------------------------------------
 # Railway mounts volumes owned by uid 0. The image runs as uid 65534, and Moodle
 # writes both its code tree (/var/www/html, kept on the volume so admin-installed
