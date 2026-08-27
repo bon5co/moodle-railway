@@ -54,3 +54,8 @@ listing on the Railway marketplace is currently missing.
 
 Mount one volume at `/var/www`. It holds both the Moodle code tree (`html/`) and the
 data directory (`moodledata/`).
+
+10. **Serves `/healthz` from nginx,** so the service can carry a Railway healthcheck at
+    all. Railway rejects a `healthcheckPath` containing a file extension, which rules out
+    Moodle's own pages, and `templateGenerate` does not carry `healthcheckTimeout` into a
+    published template.

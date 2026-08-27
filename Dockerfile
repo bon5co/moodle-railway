@@ -21,6 +21,14 @@ RUN apk add --no-cache su-exec
 # placeholder is enough for the port to follow the platform.
 RUN sed -i 's/listen 8080 default_server;/listen ${PORT} default_server;/' /etc/nginx/nginx.conf
 
+# A healthcheck endpoint nginx answers itself. Railway's default healthcheck window is
+# 300s and templateGenerate does not carry healthcheckTimeout into a published template,
+# so the probe has to be something that answers as soon as nginx binds -- not a Moodle
+# page, which is only served once the install has finished. Railway also rejects a
+# healthcheckPath containing a file extension, which rules out /login/index.php.
+RUN sed -i 's|^\(\s*\)server_name _;|\1server_name _;\n\1location = /healthz { access_log off; add_header Content-Type text/plain; return 200 "ok"; }|' /etc/nginx/nginx.conf \
+ && grep -q 'location = /healthz' /etc/nginx/nginx.conf
+
 COPY railway-entrypoint.sh /usr/local/bin/railway-entrypoint.sh
 RUN chmod +x /usr/local/bin/railway-entrypoint.sh \
  && chown -R nobody:nobody /etc/nginx /etc/php83 /docker-entrypoint-init.d
