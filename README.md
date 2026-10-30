@@ -1,5 +1,9 @@
 # moodle-railway
 
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/deploy/moodle-or-just-updated-lms-whose-cron-ac?referralCode=Z1xivh&utm_medium=integration&utm_source=template&utm_campaign=generic)
+
+**Deploy on Railway:** [Moodle template](https://railway.com/deploy/moodle-or-just-updated-lms-whose-cron-ac?referralCode=Z1xivh&utm_medium=integration&utm_source=template&utm_campaign=generic)
+
 Wrapper image for deploying [Moodle](https://moodle.org) 5.2.2 on
 [Railway](https://railway.com), built on `erseco/alpine-moodle` (nginx + php-fpm 8.3 +
 Moodle cron, all supervised by runit in one container).
